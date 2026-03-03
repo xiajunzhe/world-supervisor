@@ -1,0 +1,25 @@
+programs:
+  - name: init-once
+    directory: "/opt/world-supervisor/tools/init-job"
+    command: ["/bin/sh", "/opt/world-supervisor/tools/init-job/init.sh"]
+    autostart: true
+    autorestart: false
+    startretries: 0
+    exitcodes: [0]
+    stopwaitsecs: 5
+    logfile: "/dev/null"
+
+  - name: metrics-agent
+    directory: "/opt/world-supervisor/tools/metrics-agent"
+    command: ["/bin/sh", "/opt/world-supervisor/tools/metrics-agent/run.sh"]
+    autostart: true
+    autorestart: unexpected
+    startretries: 3
+    exitcodes: [0]
+    stopwaitsecs: 10
+    logfile: "logs/metrics-agent.log"
+    restart_delay_secs: 3
+    failure_retry_delay_secs: 5
+    environment:
+      TZ: "UTC"
+      AGENT_MODE: "prod"
