@@ -111,7 +111,7 @@ programs:
 ### 字段说明
 
 - `name`：程序名称（唯一标识，建议可读）
-- `directory`：工作目录，支持绝对路径和相对插件目录路径
+- `directory`：工作目录，支持绝对路径和相对插件数据目录路径（`plugins/WorldSupervisor/`）；未配置、为空或为 `.` 时默认使用插件数据目录
 - `command`：命令数组（建议使用相对路径 `./xx` 或绝对路径）
 - `autostart`：插件启动时是否自动拉起
 - `autorestart`：重启策略
