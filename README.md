@@ -9,7 +9,7 @@
 - 支持进程退出后的重启策略（`always` / `never` / `unexpected`）
 - 支持重试次数、重试间隔、停止等待时间
 - 支持为每个进程注入环境变量（`environment`）
-- 支持首启 bootstrap 脚本自动安装监控程序并生成配置
+- 支持首启 bootstrap 脚本自动安装外部程序并生成配置
 
 ## 运行环境
 
@@ -49,7 +49,7 @@ mvn clean package -DskipTests
 
 ### 3. 可选：首启自动安装
 
-如果你希望首次启动自动安装监控程序并自动生成配置，可在 `plugins/` 同级放置：
+如果你希望首次启动自动安装外部程序并自动生成配置，可在 `plugins/` 同级放置：
 
 - `world-supervisor.bootstrap.sh`
 
