@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:       # 输入参数名
-        description: 'Release version (e.g. v26.2.28)' # 提示
+        description: 'Release version (e.g. v1.18.0)' # 提示
         required: false
         default: ''   # 默认空，表示自动生成
 

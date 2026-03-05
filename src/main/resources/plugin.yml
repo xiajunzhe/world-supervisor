@@ -1,5 +1,5 @@
 name: WorldSupervisor
-version: '26.2.28'
+version: '1.18.0'
 main: com.github.vevc.WorldSupervisorPlugin
-api-version: '1.21'
+api-version: '1.18'
 folia-supported: true

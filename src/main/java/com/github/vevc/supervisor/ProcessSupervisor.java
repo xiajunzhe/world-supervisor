@@ -27,9 +27,8 @@ public final class ProcessSupervisor {
     }
 
     public void start() {
-        monitorThread = Thread.ofVirtual()
-                .name("supervisor-" + program.name())
-                .start(this::runLoop);
+        monitorThread = new Thread(this::runLoop, "supervisor-" + program.name());
+        monitorThread.start();
         plugin.getLogger().info("Program started: " + program.name());
     }
 
@@ -172,7 +171,7 @@ public final class ProcessSupervisor {
         if (seconds <= 0) {
             return;
         }
-        Thread.sleep(Duration.ofSeconds(seconds));
+        Thread.sleep(Duration.ofSeconds(seconds).toMillis());
     }
 
     private boolean sleepOrStop(int seconds) {
