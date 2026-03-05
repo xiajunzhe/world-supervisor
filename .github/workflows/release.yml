@@ -3,10 +3,9 @@ name: Manual Build and Release
 on:
   workflow_dispatch:
     inputs:
-      version:       # 输入参数名
-        description: 'Release version (e.g. v1.18.0)' # 提示
-        required: false
-        default: ''   # 默认空，表示自动生成
+      version:
+        description: 'Release version (e.g. v1.18.0)'
+        required: true
 
 jobs:
   build:
@@ -31,15 +30,10 @@ jobs:
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      # 4️⃣ 设置版本号：优先使用手动输入，否则自动生成
+      # 4️⃣ 设置版本号：必须手动输入
       - name: Set version tag
         id: version
-        run: |
-          if [ -n "${{ github.event.inputs.version }}" ]; then
-            echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
-          else
-            echo "version=v$(date +'%y.%-m.%-d')" >> $GITHUB_OUTPUT
-          fi
+        run: echo "version=${{ github.event.inputs.version }}" >> $GITHUB_OUTPUT
 
       # 5️⃣ 创建 Release 并上传 jar
       - name: Create GitHub Release
