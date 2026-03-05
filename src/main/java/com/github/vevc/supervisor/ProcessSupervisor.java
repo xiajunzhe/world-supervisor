@@ -5,7 +5,6 @@ import com.github.vevc.config.RestartPolicy;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -171,7 +170,7 @@ public final class ProcessSupervisor {
         if (seconds <= 0) {
             return;
         }
-        Thread.sleep(Duration.ofSeconds(seconds).toMillis());
+        TimeUnit.SECONDS.sleep(seconds);
     }
 
     private boolean sleepOrStop(int seconds) {
