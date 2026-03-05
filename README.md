@@ -13,8 +13,8 @@
 
 ## 运行环境
 
-- Java 21
-- Spigot API `1.21.x`
+- Java 17
+- Spigot API `1.18.x`
 - Linux（bootstrap 脚本执行流程按 Linux 设计）
 
 ## 项目结构
