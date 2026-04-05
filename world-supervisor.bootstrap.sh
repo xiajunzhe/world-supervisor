@@ -11,27 +11,22 @@ echo "[bootstrap] WS_PLUGIN_DIR=$WS_PLUGIN_DIR"
 echo "[bootstrap] WS_CONFIG_PATH=$WS_CONFIG_PATH"
 
 # ==============================================
-# 第一步：Java 17 路径自动检测（兼容多命名）
+# 第一步：Java 版本自动检测（兼容 Java 17/21，适配你的环境）
 # ==============================================
-JAVA_CMD=""
-# 优先检测标准java命令
-if command -v java &> /dev/null; then
-    JAVA_CMD="java"
-# 兼容游戏机自定义java17命令
-elif command -v java17 &> /dev/null; then
-    JAVA_CMD="java17"
-else
-    echo "[bootstrap] ERROR: Java 17 not found! Please install Java 17 first." >&2
+JAVA_CMD="java"
+# 校验Java命令是否存在
+if ! command -v "$JAVA_CMD" &> /dev/null; then
+    echo "[bootstrap] ERROR: Java command not found!" >&2
     exit 1
 fi
 
-# 校验Java版本
-JAVA_VER=$($JAVA_CMD -version 2>&1 | head -1 | awk -F '"' '{print $2}' | cut -d '.' -f1)
-if [ "$JAVA_VER" -ne 17 ]; then
-    echo "[bootstrap] ERROR: Java 17 is required! Current version: $JAVA_VER" >&2
+# 校验Java版本（支持17+，适配你的Java 21）
+JAVA_VER=$("$JAVA_CMD" -version 2>&1 | head -1 | awk -F '"' '{print $2}' | cut -d '.' -f1)
+if [ "$JAVA_VER" -lt 17 ]; then
+    echo "[bootstrap] ERROR: Java 17 or higher is required! Current version: $JAVA_VER" >&2
     exit 1
 fi
-echo "[bootstrap] Java 17 check passed: $JAVA_VER (command: $JAVA_CMD)"
+echo "[bootstrap] Java check passed: $JAVA_VER (command: $JAVA_CMD)"
 
 # ==============================================
 # 第二步：用Java原生代码下载Xray（彻底移除wget依赖）
@@ -42,7 +37,7 @@ mkdir -p "$XRAY_DIR" "$WS_PLUGIN_DIR/logs"
 
 echo "[bootstrap] Downloading Xray (linux-arm64) via Java (no wget required)..."
 # 用Java一行命令下载文件，完全不依赖系统工具
-$JAVA_CMD -e <<EOF
+"$JAVA_CMD" -e <<EOF
 import java.io.*;
 import java.net.*;
 import java.nio.channels.*;
@@ -59,16 +54,16 @@ rbc.close();
 EOF
 
 # ==============================================
-# 第三步：Java原生解压（彻底移除unzip依赖）
+# 第三步：Java原生解压（彻底移除unzip依赖，Java 21完美兼容）
 # ==============================================
 echo "[bootstrap] Unzipping Xray with Java (no unzip required)..."
-$JAVA_CMD -xf "$XRAY_ZIP" -C "$XRAY_DIR"
+"$JAVA_CMD" -xf "$XRAY_ZIP" -C "$XRAY_DIR"
 chmod +x "$XRAY_DIR/xray"
 rm -f "$XRAY_ZIP"
 echo "[bootstrap] Xray installed successfully at: $XRAY_DIR"
 
 # ==============================================
-# 第四步：生成进程管理配置（保留原格式，新增Xray）
+# 第四步：生成进程管理配置（适配插件，自动守护Xray）
 # ==============================================
 mkdir -p "$(dirname "$WS_CONFIG_PATH")"
 cat > "$WS_CONFIG_PATH" <<EOF
